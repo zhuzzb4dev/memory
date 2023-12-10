@@ -52,8 +52,10 @@ public class PhotoExifReader {
             GpsDirectory firstDirectoryOfType = metadata.getFirstDirectoryOfType(GpsDirectory.class);
             if (Objects.nonNull(firstDirectoryOfType)) {
                 GeoLocation geoLocation = firstDirectoryOfType.getGeoLocation();
-                photoExifInfo.setLatitude(geoLocation.getLatitude());
-                photoExifInfo.setLongitude(geoLocation.getLongitude());
+                if (Objects.nonNull(geoLocation)) {
+                    photoExifInfo.setLatitude(geoLocation.getLatitude());
+                    photoExifInfo.setLongitude(geoLocation.getLongitude());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

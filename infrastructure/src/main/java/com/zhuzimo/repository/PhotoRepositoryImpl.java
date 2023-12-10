@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 照片存储库 IMPL
@@ -32,7 +33,9 @@ public class PhotoRepositoryImpl implements PhotoRepository {
         photoDoc.setId(photo.getId());
         photoDoc.setMake(photo.getMake());
         photoDoc.setModel(photo.getModel());
-        photoDoc.setLocation(new GeoPoint(photo.getLatitude(), photo.getLongitude()));
+        if (Objects.nonNull(photo.getLatitude()) && Objects.nonNull(photo.getLongitude())) {
+            photoDoc.setLocation(new GeoPoint(photo.getLatitude(), photo.getLongitude()));
+        }
         photoDoc.setMd5Hex(photo.getMd5Hex());
         photoDoc.setSha1Hex(photo.getSha1Hex());
         photoDoc.setLength(photo.getLength());
