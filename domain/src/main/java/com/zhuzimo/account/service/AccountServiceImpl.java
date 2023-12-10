@@ -1,0 +1,32 @@
+package com.zhuzimo.account.service;
+
+import com.zhuzimo.account.aggregate.Account;
+import com.zhuzimo.account.dp.AccountName;
+import com.zhuzimo.account.dp.AccountPassword;
+import com.zhuzimo.account.repository.AccountRepository;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+
+/**
+ * 用户服务实现
+ *
+ * @author t3
+ * @date 2023/11/30
+ */
+@Component
+public class AccountServiceImpl implements AccountService {
+
+    @Resource
+    private AccountRepository accountRepository;
+
+    @Override
+    public Account queryByName(AccountName name) {
+        return accountRepository.queryByName(name);
+    }
+
+    @Override
+    public Account save(AccountName name, AccountPassword accountPassword) {
+        return accountRepository.save(Account.build4New(name, accountPassword));
+    }
+}

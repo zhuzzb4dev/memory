@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhuzimo.mapper.AccountPoMapper">
+
+    <resultMap id="BaseResultMap" type="com.zhuzimo.po.AccountPo">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="delFlag" column="del_flag" jdbcType="INTEGER"/>
+            <result property="creator" column="creator" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updater" column="updater" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,password,del_flag,
+        creator,create_time,updater,
+        update_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from account
+        where  id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from account
+        where  name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByNameAndPassword" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from account
+        where  name = #{name,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+    </select>
+
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.zhuzimo.po.AccountPo" useGeneratedKeys="true">
+        insert into account
+        ( name,password)
+        values (#{name,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR})
+    </insert>
+
+<!--    <update id="updateByPrimaryKeySelective" parameterType="com.zhuzimo.po.AccountPo">-->
+<!--        update account-->
+<!--        <set>-->
+<!--                <if test="email != null">-->
+<!--                    email = #{email,jdbcType=VARCHAR},-->
+<!--                </if>-->
+<!--                <if test="delFlag != null">-->
+<!--                    del_flag = #{delFlag,jdbcType=OTHER},-->
+<!--                </if>-->
+<!--                <if test="creator != null">-->
+<!--                    creator = #{creator,jdbcType=VARCHAR},-->
+<!--                </if>-->
+<!--                <if test="createTime != null">-->
+<!--                    create_time = #{createTime,jdbcType=TIMESTAMP},-->
+<!--                </if>-->
+<!--                <if test="updater != null">-->
+<!--                    updater = #{updater,jdbcType=VARCHAR},-->
+<!--                </if>-->
+<!--                <if test="updateTime != null">-->
+<!--                    update_time = #{updateTime,jdbcType=TIMESTAMP},-->
+<!--                </if>-->
+<!--        </set>-->
+<!--        where   id = #{id,jdbcType=OTHER} -->
+<!--    </update>-->
+
+</mapper>

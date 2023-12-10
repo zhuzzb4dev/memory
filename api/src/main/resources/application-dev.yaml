@@ -1,0 +1,12 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10240MB
+      max-request-size: 10240MB
+      location: /Users/t3/Desktop/upload
+account:
+  password:
+    salt: 123456
+upload:
+  target:
+    path: /Users/t3/Desktop/save
