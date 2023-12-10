@@ -37,6 +37,7 @@ public class PhotoRepositoryImpl implements PhotoRepository {
         photoDoc.setSha1Hex(photo.getSha1Hex());
         photoDoc.setLength(photo.getLength());
         photoDoc.setName(photo.getName());
+        photoDoc.setUserId(photo.getUserId());
         photoDocRepository.save(photoDoc);
     }
 

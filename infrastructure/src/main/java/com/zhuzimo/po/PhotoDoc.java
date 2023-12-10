@@ -32,4 +32,6 @@ public class PhotoDoc {
     private Long length;
     @Field(type = FieldType.Keyword)
     private String name;
+    @Field(type = FieldType.Keyword)
+    private Long userId;
 }

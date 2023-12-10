@@ -40,4 +40,7 @@ public interface RegisterOrLoginService {
      * @return {@link CommonResp}<{@link Long}>
      */
     CommonResp<Long> tokenExchangeUserId(@NotBlank String token);
+
+
+
 }

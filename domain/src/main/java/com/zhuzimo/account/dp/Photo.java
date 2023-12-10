@@ -18,4 +18,5 @@ public class Photo {
     private String sha1Hex;
     private String name;
     private Long length;
+    private Long userId;
 }

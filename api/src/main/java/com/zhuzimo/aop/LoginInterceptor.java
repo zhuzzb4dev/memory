@@ -1,5 +1,6 @@
 package com.zhuzimo.aop;
 
+import com.zhuzimo.MemoryConstant;
 import com.zhuzimo.dto.CommonResp;
 import com.zhuzimo.account.exception.LoginException;
 import com.zhuzimo.service.RegisterOrLoginService;
@@ -32,7 +33,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         CommonResp<Long> longCommonResp = registerOrLoginService.tokenExchangeUserId(token);
         if (longCommonResp.isSuccess()) {
-            request.setAttribute("userId", longCommonResp.getData());
+            request.setAttribute(MemoryConstant.LOGIN_USER_ID, longCommonResp.getData());
         } else {
             throw new LoginException(longCommonResp.getMsg());
         }

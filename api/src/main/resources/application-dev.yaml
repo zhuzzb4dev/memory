@@ -3,10 +3,10 @@ spring:
     multipart:
       max-file-size: 102400MB
       max-request-size: 102400MB
-      location: /Users/t3/Desktop/upload
+      location: /Users/zhuzhibin/Desktop/temp
 account:
   password:
     salt: 123456
 upload:
   target:
-    path: /Users/t3/Desktop/save
+    path: /Users/zhuzhibin/Desktop/upload
