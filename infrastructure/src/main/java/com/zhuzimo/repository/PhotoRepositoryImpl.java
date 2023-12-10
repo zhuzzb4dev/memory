@@ -9,10 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 照片存储库 IMPL
@@ -53,8 +50,11 @@ public class PhotoRepositoryImpl implements PhotoRepository {
             PhotoDoc next = iterator.next();
             Photo photo = new Photo();
             BeanUtils.copyProperties(next, photo);
-            photo.setLatitude(next.getLocation().getLat());
-            photo.setLongitude(next.getLocation().getLon());
+            GeoPoint geoPoint = next.getLocation();
+            if (Objects.nonNull(geoPoint)) {
+                photo.setLatitude(geoPoint.getLat());
+                photo.setLongitude(geoPoint.getLon());
+            }
             photos.add(photo);
         }
         return photos;
