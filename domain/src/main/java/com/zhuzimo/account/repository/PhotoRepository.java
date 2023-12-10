@@ -17,4 +17,6 @@ public interface PhotoRepository {
     List<Photo> findAll();
 
     boolean findExist(Photo photo);
+
+    List<Photo> findByUserId(Long userId);
 }

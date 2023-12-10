@@ -1,6 +1,8 @@
 package com.zhuzimo.repository;
 
 import com.zhuzimo.po.PhotoDoc;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 import java.util.List;
@@ -14,4 +16,6 @@ import java.util.List;
 public interface PhotoDocRepository extends ElasticsearchRepository<PhotoDoc, String> {
 
     List<PhotoDoc> findByMd5HexAndSha1HexAndLength(String md5Hex, String sha1Hex, Long length);
+
+    Page<PhotoDoc> findByUserId(Pageable pageable, Long userId);
 }

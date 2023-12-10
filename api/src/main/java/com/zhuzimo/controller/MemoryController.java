@@ -23,6 +23,6 @@ public class MemoryController {
 
     @PostMapping("query-all")
     public CommonResp queryAll() {
-        return CommonResp.buildSuccess(photoRepository.findAll());
+        return CommonResp.buildSuccess(photoRepository.findByUserId(userComponent.getLoginUserId()));
     }
 }

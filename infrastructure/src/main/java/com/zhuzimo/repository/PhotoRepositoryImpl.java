@@ -4,6 +4,10 @@ import com.zhuzimo.account.dp.Photo;
 import com.zhuzimo.account.repository.PhotoRepository;
 import com.zhuzimo.po.PhotoDoc;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -64,5 +68,26 @@ public class PhotoRepositoryImpl implements PhotoRepository {
     public boolean findExist(Photo photo) {
         List<PhotoDoc> list = photoDocRepository.findByMd5HexAndSha1HexAndLength(photo.getMd5Hex(), photo.getSha1Hex(), photo.getLength());
         return !CollectionUtils.isEmpty(list);
+    }
+
+    @Override
+    public List<Photo> findByUserId(Long userId) {
+        ArrayList<Photo> photos = new ArrayList<>();
+        Pageable pageable = PageRequest.of(0, 1);
+        Page<PhotoDoc> all = photoDocRepository.findByUserId(pageable, userId);
+        Iterator<PhotoDoc> iterator = all.iterator();
+        while (iterator.hasNext()) {
+            PhotoDoc next = iterator.next();
+            Photo photo = new Photo();
+            BeanUtils.copyProperties(next, photo);
+            GeoPoint geoPoint = next.getLocation();
+            if (Objects.nonNull(geoPoint)) {
+                photo.setLatitude(geoPoint.getLat());
+                photo.setLongitude(geoPoint.getLon());
+            }
+            photos.add(photo);
+        }
+
+        return photos;
     }
 }
