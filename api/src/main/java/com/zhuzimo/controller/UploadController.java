@@ -41,6 +41,7 @@ public class UploadController {
 
     @Resource
     private PhotoRepository photoRepository;
+
     /**
      * 单
      *
@@ -53,8 +54,7 @@ public class UploadController {
         if (Objects.isNull(file)) {
             return CommonResp.buildError("上传失败,文件不能为空");
         }
-        Date today = new Date();
-        String targetPath = getTargetDirPath(today);
+        String targetPath = getTargetDirPath();
         prepareTargetDir(targetPath);
         String originalFilename = file.getOriginalFilename();
         File targetFile = new File(targetPath
@@ -102,8 +102,7 @@ public class UploadController {
         if (CollectionUtils.isEmpty(files)) {
             return CommonResp.buildError("上传失败,文件不能为空");
         }
-        Date today = new Date();
-        String targetDirPath = getTargetDirPath(today);
+        String targetDirPath = getTargetDirPath();
         prepareTargetDir(targetDirPath);
         for (MultipartFile file : files) {
             String originalFilename = file.getOriginalFilename();
@@ -124,7 +123,8 @@ public class UploadController {
         return CommonResp.buildSuccess(photoRepository.findAll());
     }
 
-    private String getTargetDirPath(Date today) {
+    private String getTargetDirPath() {
+        Date today = new Date();
         String targetDirPath = path + File.separator
                 + DateUtil.year(today) + File.separator
                 + DateUtil.month(today);
