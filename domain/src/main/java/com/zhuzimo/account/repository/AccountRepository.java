@@ -1,6 +1,6 @@
 package com.zhuzimo.account.repository;
 
-import com.zhuzimo.account.aggregate.Account;
+import com.zhuzimo.account.entity.Account;
 import com.zhuzimo.account.dp.AccountName;
 import com.zhuzimo.account.dp.AccountPassword;
 

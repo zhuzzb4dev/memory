@@ -6,7 +6,6 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.GpsDirectory;
 import com.zhuzimo.dto.PhotoExifInfo;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.Date;

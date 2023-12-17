@@ -1,8 +1,8 @@
 package com.zhuzimo.account.dp;
 
+import com.zhuzimo.common.util.AssertUtil;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * 帐户名称
@@ -18,13 +18,8 @@ public class AccountName {
     private String name;
 
     public AccountName(String name) {
-        if (StringUtils.isBlank(name)) {
-            throw new IllegalArgumentException("name 不能为空");
-        }
-        if (name.length() > MAX_NAME_LENGTH) {
-            throw new IllegalArgumentException("name 长度不能超过10");
-        }
-
+        AssertUtil.assertNotBlank(name, "name 不能为空");
+        AssertUtil.assertLengthLessThan(name, MAX_NAME_LENGTH, "name 长度不能超过" + MAX_NAME_LENGTH);
         this.name = name;
     }
 

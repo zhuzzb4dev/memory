@@ -11,10 +11,10 @@ public interface CacheFacade {
 
     /**
      * 保存缓存
-     *
+     * @param <T>     范型
      * @param key     钥匙
      * @param value   价值
-     * @param timeout 超时,单位秒
+     * @param timeout 超时(秒)
      */
     <T> void saveCache(String key, T value, long timeout);
 
@@ -22,6 +22,7 @@ public interface CacheFacade {
     /**
      * 保存缓存
      *
+     * @param <T>     范型
      * @param key     钥匙
      * @param value   价值
      */
@@ -41,7 +42,7 @@ public interface CacheFacade {
      * 锁
      *
      * @param key     钥匙
-     * @param timeout 超时
+     * @param timeout 超时(秒)
      * @return boolean
      */
     boolean lock(String key, long timeout);

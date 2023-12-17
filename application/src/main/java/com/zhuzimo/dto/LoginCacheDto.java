@@ -17,4 +17,10 @@ public class LoginCacheDto implements Serializable {
 
     private Long id;
 
+    private String accountName;
+
+    private String token;
+
+    private String refreshToken;
+
 }

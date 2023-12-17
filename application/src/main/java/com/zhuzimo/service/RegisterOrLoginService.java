@@ -1,9 +1,10 @@
 package com.zhuzimo.service;
 
+import com.zhuzimo.dto.LoginCacheDto;
 import com.zhuzimo.dto.RegisterOrLoginDto;
-import com.zhuzimo.command.LoginCommand;
-import com.zhuzimo.dto.CommonResp;
-import com.zhuzimo.command.RegisterCommand;
+import com.zhuzimo.command.LoginCmd;
+import com.zhuzimo.common.CommonResp;
+import com.zhuzimo.command.RegisterCmd;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -23,7 +24,7 @@ public interface RegisterOrLoginService {
      * @param req 要求
      * @return {@link CommonResp}<{@link RegisterOrLoginDto}>
      */
-    CommonResp<RegisterOrLoginDto> register(@Valid RegisterCommand req);
+    CommonResp<RegisterOrLoginDto> register(@Valid RegisterCmd req);
 
     /**
      * 登录
@@ -31,7 +32,7 @@ public interface RegisterOrLoginService {
      * @param req 要求
      * @return {@link CommonResp}<{@link RegisterOrLoginDto}>
      */
-    CommonResp<RegisterOrLoginDto> login(LoginCommand req);
+    CommonResp<RegisterOrLoginDto> login(LoginCmd req);
 
     /**
      * 令牌交换用户 ID
@@ -39,7 +40,7 @@ public interface RegisterOrLoginService {
      * @param token 令 牌
      * @return {@link CommonResp}<{@link Long}>
      */
-    CommonResp<Long> tokenExchangeUserId(@NotBlank String token);
+    CommonResp<LoginCacheDto> tokenExchangeUserId(@NotBlank String token);
 
 
 

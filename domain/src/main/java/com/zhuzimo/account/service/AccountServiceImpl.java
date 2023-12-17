@@ -1,10 +1,9 @@
 package com.zhuzimo.account.service;
 
-import com.zhuzimo.account.aggregate.Account;
+import com.zhuzimo.account.entity.Account;
 import com.zhuzimo.account.dp.AccountName;
 import com.zhuzimo.account.dp.AccountPassword;
 import com.zhuzimo.account.repository.AccountRepository;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
@@ -14,7 +13,6 @@ import javax.annotation.Resource;
  * @author t3
  * @date 2023/11/30
  */
-@Component
 public class AccountServiceImpl implements AccountService {
 
     @Resource
@@ -27,6 +25,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account save(AccountName name, AccountPassword accountPassword) {
-        return accountRepository.save(Account.build4New(name, accountPassword));
+        return accountRepository.save(new Account(name, accountPassword));
+    }
+
+    @Override
+    public Account queryByNameAndPassword(AccountName accountName, AccountPassword accountPassword) {
+        return accountRepository.queryByNameAndPassword(accountName, accountPassword);
     }
 }

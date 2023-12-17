@@ -10,6 +10,12 @@ import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 import java.util.Date;
 
+/**
+ * 照片文档
+ *
+ * @author t3
+ * @date 2023/12/11
+ */
 @Document(indexName = "photo")
 @Getter
 @Setter

@@ -1,8 +1,9 @@
 package com.zhuzimo.aop;
 
-import com.zhuzimo.MemoryConstant;
-import com.zhuzimo.dto.CommonResp;
-import com.zhuzimo.account.exception.LoginException;
+import com.zhuzimo.APIConstant;
+import com.zhuzimo.common.CommonResp;
+import com.zhuzimo.exception.LoginException;
+import com.zhuzimo.dto.LoginCacheDto;
 import com.zhuzimo.service.RegisterOrLoginService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -25,15 +26,15 @@ public class LoginInterceptor implements HandlerInterceptor {
     private RegisterOrLoginService registerOrLoginService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         String token = request.getHeader("token");
         if (StringUtils.isBlank(token)) {
             throw new LoginException("token缺失");
         }
-        CommonResp<Long> longCommonResp = registerOrLoginService.tokenExchangeUserId(token);
+        CommonResp<LoginCacheDto> longCommonResp = registerOrLoginService.tokenExchangeUserId(token);
         if (longCommonResp.isSuccess()) {
-            request.setAttribute(MemoryConstant.LOGIN_USER_ID, longCommonResp.getData());
+            request.setAttribute(APIConstant.LOGIN_CACHE_DTO, longCommonResp.getData());
         } else {
             throw new LoginException(longCommonResp.getMsg());
         }

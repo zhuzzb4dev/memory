@@ -1,19 +1,22 @@
 package com.zhuzimo.repository;
 
-import com.zhuzimo.account.dp.Photo;
-import com.zhuzimo.account.repository.PhotoRepository;
+import com.zhuzimo.photo.aggregate.Photo;
+import com.zhuzimo.photo.repository.PhotoRepository;
+import com.zhuzimo.common.CommonPaged;
+import com.zhuzimo.common.CommonPagedAble;
 import com.zhuzimo.po.PhotoDoc;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 照片存储库 IMPL
@@ -46,48 +49,34 @@ public class PhotoRepositoryImpl implements PhotoRepository {
     }
 
     @Override
-    public List<Photo> findAll() {
-        ArrayList<Photo> photos = new ArrayList<>();
-        Iterable<PhotoDoc> all = photoDocRepository.findAll();
-        Iterator<PhotoDoc> iterator = all.iterator();
-        while (iterator.hasNext()) {
-            PhotoDoc next = iterator.next();
-            Photo photo = new Photo();
-            BeanUtils.copyProperties(next, photo);
-            GeoPoint geoPoint = next.getLocation();
-            if (Objects.nonNull(geoPoint)) {
-                photo.setLatitude(geoPoint.getLat());
-                photo.setLongitude(geoPoint.getLon());
-            }
-            photos.add(photo);
-        }
-        return photos;
-    }
-
-    @Override
     public boolean findExist(Photo photo) {
-        List<PhotoDoc> list = photoDocRepository.findByMd5HexAndSha1HexAndLength(photo.getMd5Hex(), photo.getSha1Hex(), photo.getLength());
+        List<PhotoDoc> list =
+                photoDocRepository.findByMd5HexAndSha1HexAndLengthAndUserId(
+                        photo.getMd5Hex(),
+                        photo.getSha1Hex(),
+                        photo.getLength(),
+                        photo.getUserId());
         return !CollectionUtils.isEmpty(list);
     }
 
     @Override
-    public List<Photo> findByUserId(Long userId) {
+    public CommonPaged<Photo> queryPagedByUserId(CommonPagedAble commonPagedAble, Long userId) {
         ArrayList<Photo> photos = new ArrayList<>();
-        Pageable pageable = PageRequest.of(0, 1);
+        Pageable pageable = PageRequest.of(commonPagedAble.getPageNumber() - 1, commonPagedAble.getPageSize());
         Page<PhotoDoc> all = photoDocRepository.findByUserId(pageable, userId);
-        Iterator<PhotoDoc> iterator = all.iterator();
-        while (iterator.hasNext()) {
-            PhotoDoc next = iterator.next();
-            Photo photo = new Photo();
-            BeanUtils.copyProperties(next, photo);
-            GeoPoint geoPoint = next.getLocation();
-            if (Objects.nonNull(geoPoint)) {
-                photo.setLatitude(geoPoint.getLat());
-                photo.setLongitude(geoPoint.getLon());
+        if (!all.isEmpty()) {
+            List<PhotoDoc> iterator = all.getContent();
+            for (PhotoDoc next : iterator) {
+                Photo photo = new Photo();
+                BeanUtils.copyProperties(next, photo);
+                GeoPoint geoPoint = next.getLocation();
+                if (Objects.nonNull(geoPoint)) {
+                    photo.setLatitude(geoPoint.getLat());
+                    photo.setLongitude(geoPoint.getLon());
+                }
+                photos.add(photo);
             }
-            photos.add(photo);
         }
-
-        return photos;
+        return CommonPaged.build(commonPagedAble.getPageNumber(), commonPagedAble.getPageSize(), all.getTotalElements(), all.getTotalPages(), photos);
     }
 }

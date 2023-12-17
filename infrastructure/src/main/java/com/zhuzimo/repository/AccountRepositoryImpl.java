@@ -1,6 +1,6 @@
 package com.zhuzimo.repository;
 
-import com.zhuzimo.account.aggregate.Account;
+import com.zhuzimo.account.entity.Account;
 import com.zhuzimo.account.dp.AccountName;
 import com.zhuzimo.account.dp.AccountPassword;
 import com.zhuzimo.account.repository.AccountRepository;
@@ -35,9 +35,9 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     @Override
     public Account save(Account account) {
-        AccountPo record = accountConverter.do2Po(account);
-        accountPoMapper.insert(record);
-        AccountPo accountPo = accountPoMapper.selectByPrimaryKey(record.getId());
+        AccountPo po = accountConverter.do2Po(account);
+        accountPoMapper.insert(po);
+        AccountPo accountPo = accountPoMapper.selectByPrimaryKey(po.getId());
         return po2do(accountPo);
     }
 

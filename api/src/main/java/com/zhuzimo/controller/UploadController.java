@@ -1,11 +1,12 @@
 package com.zhuzimo.controller;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.crypto.digest.DigestUtil;
-import com.zhuzimo.account.dp.Photo;
-import com.zhuzimo.account.repository.PhotoRepository;
+import com.zhuzimo.photo.aggregate.Photo;
+import com.zhuzimo.photo.repository.PhotoRepository;
+import com.zhuzimo.common.CommonResp;
 import com.zhuzimo.component.UserComponent;
-import com.zhuzimo.dto.CommonResp;
 import com.zhuzimo.dto.PhotoExifInfo;
 import com.zhuzimo.util.PhotoExifReader;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,7 @@ public class UploadController {
      * @throws IOException ioexception
      */
     @PostMapping("single")
-    public CommonResp single(MultipartFile file) throws IOException {
+    public CommonResp<?> single(MultipartFile file) throws IOException {
         if (Objects.isNull(file)) {
             return CommonResp.buildError("上传失败,文件不能为空");
         }
@@ -60,6 +61,12 @@ public class UploadController {
         return CommonResp.buildSuccess();
     }
 
+    /**
+     * 尝试保存照片
+     *
+     * @param file 文件
+     * @throws IOException ioexception
+     */
     private void trySavePhoto(MultipartFile file) throws IOException {
         String targetPath = getTargetDirPath();
         String originalFilename = file.getOriginalFilename();
@@ -70,12 +77,19 @@ public class UploadController {
         Photo photo = getPhoto(originalFilename, targetFile);
         boolean exist = photoRepository.findExist(photo);
         if (exist) {
-            targetFile.delete();
+            targetFile.deleteOnExit();
         } else {
             photoRepository.save(photo);
         }
     }
 
+    /**
+     * 获取照片
+     *
+     * @param originalFilename 原始文件名
+     * @param targetFile       目标文件
+     * @return {@link Photo}
+     */
     private Photo getPhoto(String originalFilename, File targetFile) {
         String md5Hex = DigestUtil.md5Hex(targetFile);
         String sha1Hex = DigestUtil.sha1Hex(targetFile);
@@ -93,17 +107,21 @@ public class UploadController {
         photo.setSha1Hex(sha1Hex);
         photo.setLength(length);
         photo.setName(originalFilename);
-        photo.setUserId(userComponent.getLoginUserId());
+        photo.setUserId(userComponent.getLoginCacheDto().getId());
         return photo;
     }
 
-    private void prepareTargetDir(String targetPath) {
-        File targetDir = new File(targetPath);
-        targetDir.mkdirs();
-    }
 
+
+    /**
+     * 多
+     *
+     * @param files 文件
+     * @return {@link CommonResp}
+     * @throws IOException ioexception
+     */
     @PostMapping("multi")
-    public CommonResp multi(List<MultipartFile> files) throws IOException {
+    public CommonResp<?> multi(List<MultipartFile> files) throws IOException {
         if (CollectionUtils.isEmpty(files)) {
             return CommonResp.buildError("上传失败,文件不能为空");
         }
@@ -115,12 +133,18 @@ public class UploadController {
         return CommonResp.buildSuccess();
     }
 
+    /**
+     * 获取目标目录路径
+     *
+     * @return {@link String}
+     */
     private String getTargetDirPath() {
         Date today = new Date();
         String targetDirPath = path + File.separator
+                + userComponent.getLoginCacheDto().getAccountName() + File.separator
                 + DateUtil.year(today) + File.separator
                 + DateUtil.month(today);
-        prepareTargetDir(targetDirPath);
+        FileUtil.mkdir(targetDirPath);
         return targetDirPath;
     }
 }

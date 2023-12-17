@@ -1,6 +1,7 @@
 package com.zhuzimo.aop;
 
-import com.zhuzimo.dto.CommonResp;
+import com.zhuzimo.common.CommonResp;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -48,7 +49,8 @@ public class RestAdvice {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public CommonResp<?> handleException(MethodArgumentNotValidException e) {
-        return CommonResp.buildError(e.getBindingResult().getAllErrors().stream().findFirst().get().getDefaultMessage());
+        return CommonResp.buildError(
+                e.getBindingResult().getAllErrors().stream().findFirst().orElse(new ObjectError("", ERROR_MSG)).getDefaultMessage());
     }
     /**
      * 处理异常
@@ -58,6 +60,8 @@ public class RestAdvice {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public CommonResp<?> handleException(ConstraintViolationException e) {
-        return CommonResp.buildError(e.getConstraintViolations().stream().findFirst().get().getMessage());
+        return CommonResp.buildError(e.getMessage());
     }
+
+    private static final String ERROR_MSG = "参数校验异常";
 }
