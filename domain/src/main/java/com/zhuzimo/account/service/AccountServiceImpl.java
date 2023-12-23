@@ -4,6 +4,7 @@ import com.zhuzimo.account.entity.Account;
 import com.zhuzimo.account.dp.AccountName;
 import com.zhuzimo.account.dp.AccountPassword;
 import com.zhuzimo.account.repository.AccountRepository;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
@@ -13,6 +14,7 @@ import javax.annotation.Resource;
  * @author t3
  * @date 2023/11/30
  */
+@Component
 public class AccountServiceImpl implements AccountService {
 
     @Resource
