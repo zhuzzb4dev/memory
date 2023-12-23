@@ -1,5 +1,6 @@
 package com.zhuzimo.repository;
 
+import com.zhuzimo.account.dp.AccountPasswordSalted;
 import com.zhuzimo.account.entity.Account;
 import com.zhuzimo.account.dp.AccountName;
 import com.zhuzimo.account.dp.AccountPassword;
@@ -57,6 +58,6 @@ public class AccountRepositoryImpl implements AccountRepository {
         if (Objects.isNull(po)) {
             return null;
         }
-        return new Account(po.getId(), new AccountName(po.getName()), new AccountPassword(po.getPassword(), null));
+        return new Account(po.getId(), new AccountName(po.getName()), new AccountPasswordSalted(po.getPassword()));
     }
 }

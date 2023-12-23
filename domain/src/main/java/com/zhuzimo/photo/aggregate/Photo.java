@@ -16,6 +16,7 @@ import java.util.Date;
 public class Photo {
     private String id;
     private Date time;
+    private String formatTime;
     private String make;
     private String model;
     private Double latitude;

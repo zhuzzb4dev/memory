@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <style>        body {
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border-radius: 3px;
+        border: 1px solid #ccc;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Login</h1>
+    <dev id="loginForm" >
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required value="zzb">
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required value="root1234">
+
+        <input value="Login" id="login-button">
+    </dev>
+</div>
+
+<script src="/js/layui.js"></script>
+<script>
+    // 定义登录按钮
+    const loginButton = document.getElementById("login-button");
+
+    // 监听登录按钮的点击事件
+    loginButton.addEventListener("click", function() {
+        // 获取用户名和密码输入框的值
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        // 创建一个FormData对象，用于将表单数据添加到POST请求中
+        const data = {
+            name: username,
+            password: password
+        }
+
+        // 创建一个POST请求，将表单数据发送到后台
+        fetch("/user/login", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json', // 设置请求头为JSON
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(resp => {
+                // 登录成功，跳转到成功页面
+                console.log(resp);
+                if (resp.success) {
+                    var data = resp.data;
+                    console.log(data);
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("refreshToken", data.refreshToken);
+                    window.location.href = "index.html";
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    });
+
+</script>
+</body>
+</html>

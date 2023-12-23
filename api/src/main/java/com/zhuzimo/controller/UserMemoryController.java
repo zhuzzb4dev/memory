@@ -41,4 +41,10 @@ public class UserMemoryController {
     public CommonResp<CommonPaged<Photo>> queryPaged(@RequestBody CommonPagedAble commonPagedAble) {
         return CommonResp.buildSuccess(photoRepository.queryPagedByUserId(commonPagedAble, userComponent.getLoginCacheDto().getId()));
     }
+
+    @PostMapping("clear-all")
+    public CommonResp<CommonPaged<Photo>> clearAll() {
+        photoRepository.clearAll();
+        return CommonResp.buildSuccess();
+    }
 }

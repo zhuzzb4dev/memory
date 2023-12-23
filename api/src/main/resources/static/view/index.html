@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Demo</title>
+    <!-- 请勿在项目正式环境中引用该 layui.css 地址 -->
+    <link href="../css/layui.css" rel="stylesheet">
+</head>
+<body>
+<button id="clearAll">clear-all</button>
+<div>
+    <input type="file" id="file" name="file"/>
+    <button id="upload">upload</button>
+</div>
+<div class="layui-timeline">
+    <div class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+            <h3 class="layui-timeline-title">8月18日</h3>
+            <p>
+                多年前，Layui 2.0 的发布前夜，记录着这样的一段心理活动。
+                <br>这是一个怎样的版本？它将受众如何？
+                <br>又是谁在指引着我去创作，是基于成就感的驱动，还是试图建立我与客观世界的某种沟通 <i class="layui-icon"></i>
+            </p>
+            <div style="height: 300px;">
+                <img style="height: 300px;" src="/media/image/1">
+            </div>
+        </div>
+    </div>
+    <div class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+            <h3 class="layui-timeline-title">8月16日</h3>
+            <p>Layui 使用率最高的组件有</p>
+            <ul>
+                <li>layer</li>
+                <li>table</li>
+                <li>form</li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+            <h3 class="layui-timeline-title">8月15日</h3>
+            <p>
+                这片广袤的土地孕育了璀璨的华夏文化，和我们这个饱受沧桑的民族。
+                <br>勤劳、淳朴、善良而又充满智慧的国人，一代又一代人的艰苦奋斗，古老的文明重新焕发出光彩。
+            </p>
+        </div>
+    </div>
+    <div class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+            <div class="layui-timeline-title">过去</div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/layui.js"></script>
+<script>
+    const data = {
+        pageNumber: 1,
+        pageSize: 10,
+    }
+
+    // 创建一个POST请求，将表单数据发送到后台
+    fetch("/memory/query-paged", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json', // 设置请求头为JSON
+            'token':localStorage.getItem("token"),
+        },
+        body: JSON.stringify(data),
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(resp => {
+            // 登录成功，跳转到成功页面
+            console.log(resp);
+            if (resp.success) {
+
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+
+    document.getElementById("clearAll").addEventListener("click", function() {
+        // 创建一个FormData对象，用于将表单数据添加到POST请求中
+        const req = {}
+
+        // 创建一个POST请求，将表单数据发送到后台
+        fetch("/memory/clear-all", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json', // 设置请求头为JSON
+                'token':localStorage.getItem("token"),
+            },
+            body: JSON.stringify(req),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(resp => {
+                console.log(resp);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    });
+
+    document.getElementById("upload").addEventListener("click", function() {
+        // 创建一个FormData对象，用于将表单数据添加到POST请求中
+        const formData = new FormData();
+        formData.append('file', document.getElementById('file').files[0]);
+
+        // 创建一个POST请求，将表单数据发送到后台
+        fetch("/upload/single", {
+            method: "POST",
+            headers: {
+                'token':localStorage.getItem("token"),
+            },
+            body: formData,
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(resp => {
+                console.log(resp);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    });
+</script>
+</body>
+</html>

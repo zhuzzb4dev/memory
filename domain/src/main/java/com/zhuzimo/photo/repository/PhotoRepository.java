@@ -35,4 +35,6 @@ public interface PhotoRepository {
      * @return {@link CommonPaged}<{@link Photo}>
      */
     CommonPaged<Photo> queryPagedByUserId(CommonPagedAble commonPagedAble, Long loginUserId);
+
+    void clearAll();
 }

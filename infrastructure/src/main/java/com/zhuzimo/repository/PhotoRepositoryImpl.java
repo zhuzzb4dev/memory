@@ -34,6 +34,7 @@ public class PhotoRepositoryImpl implements PhotoRepository {
     public void save(Photo photo) {
         PhotoDoc photoDoc = new PhotoDoc();
         photoDoc.setTime(photo.getTime());
+        photoDoc.setFormatTime(photo.getFormatTime());
         photoDoc.setId(photo.getId());
         photoDoc.setMake(photo.getMake());
         photoDoc.setModel(photo.getModel());
@@ -78,5 +79,10 @@ public class PhotoRepositoryImpl implements PhotoRepository {
             }
         }
         return CommonPaged.build(commonPagedAble.getPageNumber(), commonPagedAble.getPageSize(), all.getTotalElements(), all.getTotalPages(), photos);
+    }
+
+    @Override
+    public void clearAll() {
+        photoDocRepository.deleteAll();
     }
 }

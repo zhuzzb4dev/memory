@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 上传控制器
@@ -98,7 +99,9 @@ public class UploadController {
         PhotoExifInfo photoExifInfo = PhotoExifReader.getPhotoExifInfo(targetFile);
         Photo photo = new Photo();
         photo.setId(null);
-        photo.setTime(photoExifInfo.getTime());
+        Date time = Optional.ofNullable(photoExifInfo.getTime()).orElse(new Date());
+        photo.setTime(time);
+        photo.setFormatTime(DateUtil.format(time, "yyyy-MM-dd"));
         photo.setMake(photoExifInfo.getMake());
         photo.setModel(photoExifInfo.getModel());
         photo.setLatitude(photoExifInfo.getLatitude());

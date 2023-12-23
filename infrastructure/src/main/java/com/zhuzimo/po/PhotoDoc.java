@@ -25,6 +25,8 @@ public class PhotoDoc {
     @Field(type = FieldType.Keyword)
     private Date time;
     @Field(type = FieldType.Keyword)
+    private String formatTime;
+    @Field(type = FieldType.Keyword)
     private String make;
     @Field(type = FieldType.Keyword)
     private String model;
